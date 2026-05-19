@@ -2,798 +2,1017 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-<meta name="theme-color" content="#0f0f0f">
-<meta name="mobile-web-app-capable" content="yes">
-<title>תור גוזר — גאנה בדים</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>בדיקת טביעת רגל דיגיטלית — Instagram</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;400;500;600;700&display=swap');
+:root {
+  --bg:      #0b0e18;
+  --surface: #13172a;
+  --border:  #252a45;
+  --accent:  #4f7cff;
+  --accent2: #7c5cff;
+  --green:   #2dd4a0;
+  --red:     #ff5a5a;
+  --yellow:  #f5c842;
+  --text:    #e8eaf6;
+  --muted:   #6b728f;
+  --radius:  16px;
+  --font:    'Heebo', sans-serif;
+}
 
-  :root {
-    --bg:          #0f0f11;
-    --surface:     #1a1a1f;
-    --surface2:    #222228;
-    --border:      rgba(255,255,255,0.07);
-    --border-hi:   rgba(255,255,255,0.14);
-    --text:        #e8e6e1;
-    --text-dim:    #888680;
-    --text-faint:  #4a4a50;
-    --amber:       #f4a738;
-    --amber-bg:    rgba(244,167,56,0.12);
-    --blue:        #4e9cf5;
-    --blue-bg:     rgba(78,156,245,0.10);
-    --green:       #4db87a;
-    --green-bg:    rgba(77,184,122,0.10);
-    --red:         #e05555;
-    --red-bg:      rgba(224,85,85,0.10);
-    --radius:      14px;
-    --radius-sm:   8px;
-    font-family: 'Rubik', sans-serif;
-  }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
 
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 24px 16px 60px;
+  position: relative;
+}
 
-  body {
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100dvh;
-    overscroll-behavior: none;
-  }
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 10%, rgba(79,124,255,0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 50% at 80% 90%, rgba(124,92,255,0.08) 0%, transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
 
-  /* ── Top nav tabs ── */
-  .top-tabs {
-    display: flex;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg);
-    position: sticky; top: 0; z-index: 200;
-  }
-  .top-tab {
-    flex: 1; padding: 14px 8px;
-    background: none; border: none;
-    color: var(--text-dim);
-    font-family: 'Rubik', sans-serif; font-size: 13px; font-weight: 500;
-    cursor: pointer; border-bottom: 2px solid transparent;
-    transition: all 0.15s;
-  }
-  .top-tab.active { color: var(--amber); border-bottom-color: var(--amber); }
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
 
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
+.page-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 860px;
+  margin: 0 auto;
+}
 
-  /* ── Header ── */
-  .header {
-    position: sticky; top: 47px; z-index: 100;
-    background: rgba(15,15,17,0.92);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 16px;
-    height: 56px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .header-logo { font-size: 17px; font-weight: 600; letter-spacing: -0.3px; }
-  .header-logo span { color: var(--amber); }
-  .badge-count {
-    background: var(--amber); color: #000;
-    font-size: 12px; font-weight: 700;
-    border-radius: 20px; padding: 2px 8px;
-    min-width: 24px; text-align: center; display: none;
-  }
-  .badge-count.visible { display: inline-block; }
+/* ─── HEADER ─────────────────────────────── */
+.page-header {
+  text-align: center;
+  margin-bottom: 36px;
+  padding-top: 12px;
+}
 
-  /* ── Filter bar ── */
-  .filter-bar {
-    display: flex; gap: 8px; padding: 12px 16px;
-    overflow-x: auto; scrollbar-width: none;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg);
-  }
-  .filter-bar::-webkit-scrollbar { display: none; }
-  .filter-btn {
-    flex-shrink: 0; padding: 6px 14px; border-radius: 20px;
-    border: 1px solid var(--border); background: transparent;
-    color: var(--text-dim); font-family: 'Rubik', sans-serif;
-    font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s;
-  }
-  .filter-btn:active { transform: scale(0.96); }
-  .fcnt {
-    display: inline-block;
-    font-size: 11px; font-weight: 700;
-    background: rgba(255,255,255,0.12);
-    border-radius: 10px; padding: 1px 6px;
-    margin-right: 2px; min-width: 18px; text-align: center;
-  }
-  .filter-btn.active .fcnt { background: rgba(0,0,0,0.18); }
-  .filter-btn.active                { background: var(--amber); border-color: var(--amber); color: #000; }
-  .filter-btn.status-ממתין.active  { background: var(--amber); border-color: var(--amber); color: #000; }
-  .filter-btn.status-בחיתוך.active { background: var(--blue);  border-color: var(--blue);  color: #000; }
-  .filter-btn.status-מוכן.active   { background: var(--green); border-color: var(--green); color: #000; }
+.page-header .icon {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+}
 
-  /* ── Main ── */
-  .main { padding: 12px 12px 100px; }
+.page-header h1 {
+  font-size: 1.9rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
 
-  .state-wrap {
-    display: flex; flex-direction: column; align-items: center;
-    justify-content: center; gap: 12px;
-    min-height: 50vh; padding: 32px;
-    color: var(--text-faint); font-size: 15px; text-align: center;
-  }
-  .state-icon { font-size: 40px; }
+.page-header p {
+  color: var(--muted);
+  font-size: 0.95rem;
+  max-width: 560px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
 
-  /* ── Card ── */
-  .card {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px; margin-bottom: 10px;
-    position: relative; transition: border-color 0.2s, transform 0.15s;
-    animation: slideIn 0.25s ease both;
-  }
-  .card:active { transform: scale(0.99); }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-  .card::before {
-    content: ''; position: absolute; top: 12px; right: -1px; bottom: 12px;
-    width: 3px; border-radius: 3px 0 0 3px;
-  }
-  .card[data-status="ממתין"]::before  { background: var(--amber); }
-  .card[data-status="בחיתוך"]::before { background: var(--blue);  }
-  .card[data-status="מוכן @"]::before,
-  .card[data-status="מוכן 💰"]::before { background: var(--green); }
+/* ─── CARD ───────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 28px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35);
+}
 
-  .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-  .order-id { font-size: 11px; font-weight: 600; letter-spacing: 0.5px; color: var(--text-faint); }
-  .status-pill { font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px; border: 1px solid; }
-  .status-pill.ממתין  { color: var(--amber); border-color: var(--amber); background: var(--amber-bg); }
-  .status-pill.בחיתוך { color: var(--blue);  border-color: var(--blue);  background: var(--blue-bg);  }
-  .status-pill.מוכן,
-  [class*="status-pill"][class*="מוכן"] { color: var(--green); border-color: var(--green); background: var(--green-bg); }
-  .fabric-name   { font-size: 20px; font-weight: 700; margin-bottom: 4px; letter-spacing: -0.3px; }
-  .customer-name { font-size: 13px; color: var(--text-dim); margin-bottom: 12px; }
+.card-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
 
-  .meta-row  { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
-  .meta-item { display: flex; flex-direction: column; gap: 2px; }
-  .meta-label { font-size: 10px; font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase; color: var(--text-faint); }
-  .meta-value { font-size: 15px; font-weight: 500; }
-  .meta-value.highlight { color: var(--amber); }
+.phase-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
 
-  .notes-text {
-    font-size: 12px; color: var(--text-dim);
-    background: var(--surface2); border-radius: var(--radius-sm);
-    padding: 8px 10px; margin-bottom: 14px;
-    border-right: 2px solid var(--text-faint);
-  }
+/* ─── FORM ───────────────────────────────── */
+.input-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
 
-  .action-section { border-top: 1px solid var(--border); padding-top: 14px; }
-  .qty-input-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-  .qty-label { font-size: 12px; color: var(--text-dim); white-space: nowrap; }
-  .qty-input {
-    flex: 1; background: var(--surface2); border: 1px solid var(--border-hi);
-    border-radius: var(--radius-sm); color: var(--text);
-    font-family: 'Rubik', sans-serif; font-size: 16px; font-weight: 500;
-    padding: 9px 12px; text-align: center; -webkit-appearance: none;
-    transition: border-color 0.15s;
-  }
-  .qty-input:focus { outline: none; border-color: var(--amber); }
+@media (max-width: 580px) {
+  .input-grid { grid-template-columns: 1fr; }
+}
 
-  .btn-row { display: flex; gap: 8px; }
-  .btn {
-    flex: 1; padding: 13px 8px; border-radius: var(--radius-sm);
-    border: 1px solid var(--border-hi);
-    font-family: 'Rubik', sans-serif; font-size: 13px; font-weight: 600;
-    cursor: pointer; transition: all 0.15s;
-    display: flex; align-items: center; justify-content: center; gap: 6px;
-  }
-  .btn:active { transform: scale(0.97); }
-  .btn-start  { background: var(--blue-bg);  border-color: var(--blue);  color: var(--blue);  }
-  .btn-done   { background: var(--green-bg); border-color: var(--green); color: var(--green); }
-  .btn-report { background: var(--red-bg);   border-color: var(--red);   color: var(--red); flex: 0 0 auto; padding: 13px 14px; }
-  .btn:disabled { opacity: 0.4; pointer-events: none; }
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
 
-  @keyframes spin { to { transform: rotate(360deg); } }
+.field label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
 
-  .toast {
-    position: fixed; bottom: 24px; left: 50%;
-    transform: translateX(-50%) translateY(80px);
-    z-index: 999; background: var(--surface2); border: 1px solid var(--border-hi);
-    border-radius: 30px; padding: 10px 20px;
-    font-size: 13px; font-weight: 500; white-space: nowrap;
-    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), opacity 0.3s;
-    opacity: 0; pointer-events: none;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-  .toast.success { border-color: var(--green); color: var(--green); }
-  .toast.error   { border-color: var(--red);   color: var(--red);   }
+.field input {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  color: var(--text);
+  transition: border-color 0.2s;
+  direction: ltr;
+  text-align: left;
+}
 
-  .fab {
-    position: fixed; bottom: 24px; left: 20px;
-    width: 52px; height: 52px; border-radius: 50%;
-    background: var(--surface2); border: 1px solid var(--border-hi);
-    color: var(--text-dim); font-size: 20px; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s; box-shadow: 0 4px 20px rgba(0,0,0,0.4);
-  }
-  .fab:active { transform: scale(0.92); }
-  .fab.spinning { animation: spin 0.8s linear infinite; }
+.field input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
 
-  /* ── Config overlay ── */
-  .config-overlay {
-    position: fixed; inset: 0; z-index: 300;
-    background: rgba(0,0,0,0.7);
-    display: flex; align-items: flex-end;
-    opacity: 0; pointer-events: none; transition: opacity 0.2s;
-  }
-  .config-overlay.open { opacity: 1; pointer-events: all; }
-  .config-sheet {
-    width: 100%; background: var(--surface);
-    border-radius: var(--radius) var(--radius) 0 0;
-    padding: 24px 20px 40px; border: 1px solid var(--border);
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.34,1.4,0.64,1);
-  }
-  .config-overlay.open .config-sheet { transform: translateY(0); }
-  .config-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
-  .config-input {
-    width: 100%; background: var(--surface2); border: 1px solid var(--border-hi);
-    border-radius: var(--radius-sm); color: var(--text);
-    font-family: 'Rubik', sans-serif; font-size: 13px;
-    padding: 11px 12px; margin-bottom: 12px; direction: ltr;
-  }
-  .config-input:focus { outline: none; border-color: var(--amber); }
-  .config-hint { font-size: 11px; color: var(--text-faint); margin-bottom: 20px; line-height: 1.7; }
-  .config-save {
-    width: 100%; padding: 13px; background: var(--amber); border: none;
-    border-radius: var(--radius-sm);
-    font-family: 'Rubik', sans-serif; font-size: 15px; font-weight: 700;
-    color: #000; cursor: pointer;
-  }
+.field input::placeholder { color: var(--muted); }
 
-  /* ── Apps Script tab ── */
-  .gs-panel { padding: 16px; }
-  .gs-intro {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px; margin-bottom: 16px;
-  }
-  .gs-intro h2 { font-size: 15px; font-weight: 600; margin-bottom: 10px; color: var(--amber); }
-  .gs-step {
-    font-size: 13px; color: var(--text-dim); line-height: 1.8;
-    counter-reset: step;
-  }
-  .gs-step li { list-style: none; padding-right: 28px; position: relative; margin-bottom: 4px; }
-  .gs-step li::before {
-    counter-increment: step;
-    content: counter(step);
-    position: absolute; right: 0;
-    background: var(--surface2); border: 1px solid var(--border-hi);
-    color: var(--amber); font-size: 11px; font-weight: 700;
-    width: 20px; height: 20px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center; top: 2px;
-  }
-  .gs-code-wrap {
-    background: var(--surface2); border: 1px solid var(--border);
-    border-radius: var(--radius); overflow: hidden;
-  }
-  .gs-code-header {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 14px; border-bottom: 1px solid var(--border);
-    font-size: 12px; color: var(--text-dim);
-  }
-  .gs-copy-btn {
-    background: var(--amber); border: none; border-radius: 6px;
-    padding: 5px 12px; font-family: 'Rubik', sans-serif;
-    font-size: 12px; font-weight: 600; color: #000; cursor: pointer;
-    transition: opacity 0.15s;
-  }
-  .gs-copy-btn:active { opacity: 0.7; }
-  .gs-code {
-    padding: 16px; font-family: 'Courier New', monospace;
-    font-size: 11px; line-height: 1.7; color: #c9d1d9;
-    overflow-x: auto; white-space: pre; max-height: 60vh; overflow-y: auto;
-    direction: ltr; text-align: left;
-  }
+.session-hint {
+  font-size: 0.78rem;
+  color: var(--muted);
+  margin-top: 4px;
+}
+
+.session-hint a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 20px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-family: var(--font);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+.btn-primary:active { transform: translateY(0); }
+
+/* ─── TOOL BLOCK ─────────────────────────── */
+.tool-block {
+  margin-bottom: 20px;
+}
+
+.tool-block:last-child { margin-bottom: 0; }
+
+.tool-label {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.code-wrap {
+  position: relative;
+}
+
+.code-block {
+  background: #070a14;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 48px 14px 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.82rem;
+  color: #a8d8a8;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-all;
+  direction: ltr;
+  text-align: left;
+  min-height: 48px;
+}
+
+.copy-btn {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 5px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-family: var(--font);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.copy-btn:hover { color: var(--accent); border-color: var(--accent); }
+.copy-btn.copied { color: var(--green); border-color: var(--green); }
+
+/* ─── LINKS ROW ───────────────────────────── */
+.links-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.link-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(79,124,255,0.08);
+}
+
+.link-btn.green { border-color: var(--green); color: var(--green); }
+.link-btn.green:hover { background: rgba(45,212,160,0.08); }
+
+/* ─── ACCORDION ───────────────────────────── */
+details summary {
+  font-size: 0.82rem;
+  color: var(--muted);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  user-select: none;
+}
+
+details summary::before {
+  content: '▶';
+  font-size: 0.65rem;
+  transition: transform 0.2s;
+}
+
+details[open] summary::before { transform: rotate(90deg); }
+
+details .install-box {
+  background: #070a14;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  margin-top: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.7;
+  direction: ltr;
+  text-align: left;
+}
+
+/* ─── RESULT BOX ─────────────────────────── */
+.result-box {
+  background: #070a14;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px;
+  margin-top: 14px;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  direction: ltr;
+  text-align: left;
+  display: none;
+}
+
+.result-box.visible { display: block; }
+.result-box.ok { border-color: var(--green); color: var(--green); }
+.result-box.err { border-color: var(--red); color: #ff8a8a; }
+.result-box.warn { border-color: var(--yellow); color: var(--yellow); }
+
+/* ─── EMAIL CHECK ─────────────────────────── */
+.email-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.email-row .field { flex: 1; }
+
+.btn-small {
+  padding: 10px 18px;
+  background: var(--surface);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  color: var(--accent);
+  font-family: var(--font);
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+
+.btn-small:hover { background: rgba(79,124,255,0.12); }
+
+/* ─── INFO BOX ────────────────────────────── */
+.info-box {
+  background: rgba(79,124,255,0.08);
+  border: 1px solid rgba(79,124,255,0.3);
+  border-radius: 12px;
+  padding: 18px 20px;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--text);
+  margin-bottom: 20px;
+}
+
+.info-box h3 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--accent);
+  margin-bottom: 10px;
+}
+
+.info-box ol, .info-box ul {
+  padding-right: 20px;
+}
+
+.info-box li { margin-bottom: 4px; }
+
+.warn-box {
+  background: rgba(245,200,66,0.07);
+  border-color: rgba(245,200,66,0.3);
+}
+
+.warn-box h3 { color: var(--yellow); }
+
+/* ─── DIVIDER ─────────────────────────────── */
+.divider {
+  height: 1px;
+  background: var(--border);
+  margin: 18px 0;
+}
+
+/* ─── TOAST ───────────────────────────────── */
+#toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--surface);
+  border: 1px solid var(--green);
+  color: var(--green);
+  padding: 10px 22px;
+  border-radius: 50px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.3s;
+  z-index: 100;
+  white-space: nowrap;
+}
+
+#toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ─── STATUS ROW ──────────────────────────── */
+.status-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex-shrink: 0;
+}
+
+.dot.green { background: var(--green); }
+.dot.red   { background: var(--red); }
+.dot.yellow { background: var(--yellow); }
 </style>
 </head>
 <body>
 
-<!-- ══ Top navigation ══ -->
-<div class="top-tabs">
-  <button class="top-tab active" onclick="switchTab('orders',this)">📋 תור הזמנות</button>
-  <button class="top-tab"        onclick="switchTab('setup',this)">⚙️ הגדרה ראשונית</button>
-</div>
+<div class="page-wrap">
 
-<!-- ══════════════════════════════════════
-     TAB 1 — ORDER QUEUE
-══════════════════════════════════════ -->
-<div id="tab-orders" class="tab-panel active">
-
-  <header class="header">
-    <div class="header-logo">גאנה <span>בדים</span></div>
-    <div style="display:flex;align-items:center;gap:10px">
-      <span id="badge" class="badge-count"></span>
-      <button onclick="openConfig()" style="background:none;border:none;color:var(--text-dim);font-size:20px;cursor:pointer;padding:4px">⚙</button>
-    </div>
+  <!-- HEADER -->
+  <header class="page-header">
+    <span class="icon">🔍</span>
+    <h1>בדיקת טביעת רגל דיגיטלית</h1>
+    <p>כלי לבדיקה עצמאית של מה ניתן לאסוף על החשבון שלך באינסטגרם — לשימוש על החשבון שלך בלבד.</p>
   </header>
 
-  <div class="filter-bar">
-    <button class="filter-btn active" data-filter="all"     onclick="setFilter('all',this)">הכל <span class="fcnt" id="cnt-all"></span></button>
-    <button class="filter-btn status-ממתין"  data-filter="ממתין"  onclick="setFilter('ממתין',this)">ממתין <span class="fcnt" id="cnt-ממתין"></span></button>
-    <button class="filter-btn status-בחיתוך" data-filter="בחיתוך" onclick="setFilter('בחיתוך',this)">בחיתוך <span class="fcnt" id="cnt-בחיתוך"></span></button>
-    <button class="filter-btn status-מוכן"   data-filter="מוכן"   onclick="setFilter('מוכן',this)">מוכן <span class="fcnt" id="cnt-מוכן"></span></button>
-  </div>
-
-  <main class="main" id="cardsWrap"></main>
-
-  <button class="fab" id="fab" onclick="loadOrders()" title="רענן">↻</button>
-
-</div>
-
-<!-- ══════════════════════════════════════
-     TAB 2 — SETUP (Apps Script + Config)
-══════════════════════════════════════ -->
-<div id="tab-setup" class="tab-panel">
-  <div class="gs-panel">
-
-    <div class="gs-intro">
-      <h2>חיבור ל-Google Sheet — הוראות</h2>
-      <ol class="gs-step">
-        <li>פתח את ה-Google Sheet שלך</li>
-        <li>לחץ: <strong>Extensions › Apps Script</strong></li>
-        <li>מחק את כל הקוד הקיים בחלון</li>
-        <li>לחץ <strong>העתק קוד</strong> למטה ← הדבק שם</li>
-        <li>שמור (Ctrl+S) ואז: <strong>Deploy › New deployment</strong></li>
-        <li>סוג: Web app | Execute as: <em>Me</em> | Access: <em>Anyone</em></li>
-        <li>לחץ Deploy ← העתק את ה-URL שנוצר</li>
-        <li>חזור לטאב "תור הזמנות" ← לחץ ⚙ ← הדבק את ה-URL</li>
-      </ol>
+  <!-- INPUT CARD -->
+  <div class="card">
+    <div class="card-title">
+      <span>⚙️</span> הגדרת יעד
     </div>
 
-    <!-- URL config inline -->
-    <div class="gs-intro" style="margin-bottom:16px">
-      <h2>כתובת ה-Script (Web App URL)</h2>
-      <input class="config-input" id="scriptUrlInline" type="url" style="margin-bottom:10px"
-             placeholder="https://script.google.com/macros/s/…/exec"
-             autocomplete="off" spellcheck="false">
-      <button class="config-save" style="border-radius:8px" onclick="saveConfigInline()">שמור וחבר</button>
-    </div>
-
-    <div class="gs-code-wrap">
-      <div class="gs-code-header">
-        <span>Code.gs — הדבק ב-Apps Script</span>
-        <button class="gs-copy-btn" onclick="copyGsCode()">📋 העתק קוד</button>
+    <div class="input-grid">
+      <div class="field">
+        <label>UID של החשבון</label>
+        <input type="text" id="inp-uid" placeholder="53693488780" dir="ltr">
       </div>
-      <pre class="gs-code" id="gsCodeBlock"></pre>
+      <div class="field">
+        <label>שם משתמש (Username)</label>
+        <input type="text" id="inp-username" placeholder="can_not_anymore" dir="ltr">
+      </div>
+      <div class="field" style="grid-column: 1 / -1;">
+        <label>Session ID (אופציונלי — לכלים שדורשים אימות)</label>
+        <input type="password" id="inp-session" placeholder="הדבק כאן את ה-sessionid מה-cookies" dir="ltr" autocomplete="off">
+        <span class="session-hint">לא נשמר לשום מקום — נשאר רק בזיכרון הדפדפן</span>
+      </div>
     </div>
 
+    <button class="btn-primary" onclick="generate()">
+      <span>▶</span> הפעל בדיקה
+    </button>
   </div>
-</div>
 
-<!-- ══ Toast ══ -->
-<div class="toast" id="toast"></div>
+  <!-- HOW TO GET SESSION ID -->
+  <div class="info-box">
+    <h3>📋 איך להשיג Session ID</h3>
+    <ol>
+      <li>היכנס לאינסטגרם בדפדפן (Chrome / Firefox)</li>
+      <li>לחץ <strong>F12</strong> לפתיחת DevTools</li>
+      <li>עבור ל-<strong>Application</strong> (Chrome) או <strong>Storage</strong> (Firefox)</li>
+      <li>בצד שמאל: <strong>Cookies → https://www.instagram.com</strong></li>
+      <li>מצא את הערך של <strong>sessionid</strong> והעתק אותו</li>
+    </ol>
+  </div>
 
-<!-- ══ Config overlay (from gear icon) ══ -->
-<div class="config-overlay" id="configOverlay" onclick="closeConfigOnBg(event)">
-  <div class="config-sheet">
-    <div class="config-title">כתובת ה-Apps Script</div>
-    <input class="config-input" id="scriptUrlInput" type="url"
-           placeholder="https://script.google.com/macros/s/…/exec"
-           autocomplete="off" spellcheck="false">
-    <div class="config-hint">
-      לא עשית את ההגדרה עדיין?<br>
-      עבור לטאב <strong>⚙️ הגדרה ראשונית</strong> לקבלת הוראות מלאות.
+  <!-- PHASE 1 -->
+  <div class="card" id="phase1">
+    <div class="card-title">
+      <span class="phase-badge">1</span>
+      שליפת פרטי יוזר מ-UID
     </div>
-    <button class="config-save" onclick="saveConfig()">שמור וחבר</button>
+
+    <div class="tool-block">
+      <div class="tool-label">🌐 בדיקה ישירה מהדפדפן (דורש כניסה לאינסטגרם)</div>
+      <div class="links-row">
+        <button class="link-btn green" onclick="tryBrowserFetch()">⚡ נסה שליפה מהדפדפן</button>
+        <a id="link-profile" class="link-btn" href="#" target="_blank" rel="noopener">👤 פתח פרופיל</a>
+      </div>
+      <div id="browser-result" class="result-box"></div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="tool-block">
+      <div class="tool-label">💻 Instaloader — שליפה בסיסית</div>
+      <div class="code-wrap">
+        <pre class="code-block" id="cmd-instaloader">pip install instaloader
+instaloader --no-pictures --no-videos --no-captions --no-metadata-json --user-id {UID}</pre>
+        <button class="copy-btn" onclick="copyCode('cmd-instaloader', this)">העתק</button>
+      </div>
+    </div>
+
+    <div class="tool-block">
+      <div class="tool-label">💻 curl ישיר ל-Instagram Internal API</div>
+      <div class="code-wrap">
+        <pre class="code-block" id="cmd-curl-uid">curl -s \
+  -H "User-Agent: Mozilla/5.0 (Linux; Android 10; SM-G960F)" \
+  -H "Cookie: sessionid={SESSION}" \
+  "https://i.instagram.com/api/v1/users/{UID}/info/" | python3 -m json.tool</pre>
+        <button class="copy-btn" onclick="copyCode('cmd-curl-uid', this)">העתק</button>
+      </div>
+    </div>
   </div>
-</div>
+
+  <!-- PHASE 2 -->
+  <div class="card" id="phase2">
+    <div class="card-title">
+      <span class="phase-badge">2</span>
+      שליפת מייל ומספר טלפון
+    </div>
+
+    <div class="info-box warn-box" style="margin-bottom:16px;">
+      <h3>⚠️ מגבלות</h3>
+      מייל ציבורי מוחזר רק אם הגדרת <strong>Contact Email</strong> בפרופיל (בעיקר חשבונות עסקיים). Toutatis יכול להציג מייל אובסקורטי כמו <code>a***@gmail.com</code>.
+    </div>
+
+    <div class="tool-block">
+      <div class="tool-label">🔧 Toutatis — מייל + טלפון (אובסקורטי)</div>
+      <div class="code-wrap">
+        <pre class="code-block" id="cmd-toutatis">python3 toutatis.py -u {USERNAME} -s {SESSION}</pre>
+        <button class="copy-btn" onclick="copyCode('cmd-toutatis', this)">העתק</button>
+      </div>
+      <details>
+        <summary>הוראות התקנה</summary>
+        <div class="install-box">git clone https://github.com/iamunixtz/Toutatis.git
+cd Toutatis
+pip install -r requirements.txt</div>
+      </details>
+    </div>
+
+    <div class="tool-block">
+      <div class="tool-label">🔧 osi.ig — מידע כללי על פרופיל</div>
+      <div class="code-wrap">
+        <pre class="code-block" id="cmd-osig">python3 main.py -u {USERNAME}</pre>
+        <button class="copy-btn" onclick="copyCode('cmd-osig', this)">העתק</button>
+      </div>
+      <details>
+        <summary>הוראות התקנה</summary>
+        <div class="install-box">git clone https://github.com/th3unkn0n/osi.ig.git
+cd osi.ig
+pip install -r requirements.txt</div>
+      </details>
+    </div>
+
+    <div class="tool-block">
+      <div class="tool-label">🔧 InstaRecon — מיילים ציבוריים</div>
+      <div class="code-wrap">
+        <pre class="code-block" id="cmd-instarecon">python instarecon.py -u {USERNAME} -s {SESSION}</pre>
+        <button class="copy-btn" onclick="copyCode('cmd-instarecon', this)">העתק</button>
+      </div>
+      <details>
+        <summary>הוראות התקנה</summary>
+        <div class="install-box">git clone https://github.com/Faizee-Asad/InstaRecon.git
+cd InstaRecon
+pip install -r requirements.txt</div>
+      </details>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="card" id="phase3">
+    <div class="card-title">
+      <span class="phase-badge">3</span>
+      היסטוריית שמות משתמש ועקבות ברשת
+    </div>
+
+    <div class="tool-block">
+      <div class="tool-label">🌐 WayBack Machine — ארכיון ישן של הפרופיל</div>
+      <div class="links-row">
+        <a id="link-wayback" class="link-btn green" href="#" target="_blank" rel="noopener">📦 פתח WayBack Machine</a>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="tool-block">
+      <div class="tool-label">💻 Sherlock — חיפוש Username על פני פלטפורמות</div>
+      <div class="code-wrap">
+        <pre class="code-block" id="cmd-sherlock">python3 sherlock {USERNAME}</pre>
+        <button class="copy-btn" onclick="copyCode('cmd-sherlock', this)">העתק</button>
+      </div>
+      <details>
+        <summary>הוראות התקנה</summary>
+        <div class="install-box">git clone https://github.com/sherlock-project/sherlock.git
+cd sherlock
+pip install -r requirements.txt</div>
+      </details>
+    </div>
+
+    <div class="tool-block">
+      <div class="tool-label">💻 Social-Analyzer — חיפוש על 1000+ פלטפורמות</div>
+      <div class="code-wrap">
+        <pre class="code-block" id="cmd-social">node app.js --username "{USERNAME}" --mode fast</pre>
+        <button class="copy-btn" onclick="copyCode('cmd-social', this)">העתק</button>
+      </div>
+      <details>
+        <summary>הוראות התקנה</summary>
+        <div class="install-box">git clone https://github.com/qeeqbox/social-analyzer.git
+cd social-analyzer
+npm install</div>
+      </details>
+    </div>
+
+    <div class="tool-block">
+      <div class="tool-label">💻 Instaloader — היסטוריית פרופיל (אם קיים)</div>
+      <div class="code-wrap">
+        <pre class="code-block" id="cmd-insta-history">instaloader --no-pictures {USERNAME}</pre>
+        <button class="copy-btn" onclick="copyCode('cmd-insta-history', this)">העתק</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="card" id="phase4">
+    <div class="card-title">
+      <span class="phase-badge">4</span>
+      שליפת פרטים ישירה דרך Instagram API
+    </div>
+
+    <div class="tool-block">
+      <div class="tool-label">🐍 Python Script — שליפת כל השדות הזמינים</div>
+      <div class="code-wrap">
+        <pre class="code-block" id="cmd-python">#!/usr/bin/env python3
+# instagram_osint.py
+# Usage: python3 instagram_osint.py -u {UID} -s YOUR_SESSION_ID
+import requests, json, argparse
+
+def get_user_info(uid, session_id):
+    url = f"https://i.instagram.com/api/v1/users/{uid}/info/"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Linux; Android 11; SM-G991B) "
+                      "AppleWebKit/537.36 (KHTML, like Gecko) "
+                      "Chrome/90.0.4430.210 Mobile Safari/537.36",
+        "Cookie": f"sessionid={session_id}",
+        "Accept": "*/*",
+        "Accept-Language": "en-US",
+        "X-Requested-With": "XMLHttpRequest",
+    }
+    r = requests.get(url, headers=headers)
+    if r.status_code == 200:
+        data = r.json().get("user", {})
+        fields = [
+            ("Username",       data.get("username")),
+            ("Full Name",      data.get("full_name")),
+            ("Bio",            data.get("biography")),
+            ("Public Email",   data.get("public_email")),
+            ("Public Phone",   data.get("public_phone_number")),
+            ("External URL",   data.get("external_url")),
+            ("Business Email", data.get("business_email")),
+            ("Followers",      data.get("follower_count")),
+            ("Following",      data.get("following_count")),
+            ("Posts",          data.get("media_count")),
+            ("Is Private",     data.get("is_private")),
+            ("Is Verified",    data.get("is_verified")),
+        ]
+        for label, val in fields:
+            if val not in (None, "", False):
+                print(f"[+] {label}: {val}")
+        return data
+    else:
+        print(f"[-] Error {r.status_code}: {r.text[:200]}")
+
+if __name__ == "__main__":
+    p = argparse.ArgumentParser()
+    p.add_argument("-u", "--uid", required=True)
+    p.add_argument("-s", "--session", required=True)
+    args = p.parse_args()
+    get_user_info(args.uid, args.session)</pre>
+        <button class="copy-btn" onclick="copyCode('cmd-python', this)">העתק</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="card" id="phase5">
+    <div class="card-title">
+      <span class="phase-badge">5</span>
+      Google Dorks — חיפוש עקבות ב-Google
+    </div>
+
+    <p style="font-size:0.88rem; color:var(--muted); margin-bottom:16px;">
+      לחץ על כל כפתור לפתיחת חיפוש Google מוכן. ייפתח בלשונית חדשה.
+    </p>
+
+    <div id="dorks-grid" class="links-row" style="flex-direction:column; align-items:stretch; gap:10px;">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- PHASE 6 -->
+  <div class="card" id="phase6">
+    <div class="card-title">
+      <span class="phase-badge">6</span>
+      Holehe — אימות מייל מועמד
+    </div>
+
+    <p style="font-size:0.88rem; color:var(--muted); margin-bottom:16px;">
+      אם יש לך כתובת מייל שחשדת בה — בדוק אם היא מחוברת לחשבון.
+    </p>
+
+    <div class="email-row">
+      <div class="field">
+        <label>כתובת מייל לבדיקה</label>
+        <input type="email" id="inp-email" placeholder="example@gmail.com" dir="ltr">
+      </div>
+      <button class="btn-small" onclick="generateHolehe()">עדכן פקודה</button>
+    </div>
+
+    <div style="margin-top:16px;">
+      <div class="tool-label">💻 Holehe</div>
+      <div class="code-wrap">
+        <pre class="code-block" id="cmd-holehe">pip install holehe
+holehe example@gmail.com</pre>
+        <button class="copy-btn" onclick="copyCode('cmd-holehe', this)">העתק</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIMITATIONS -->
+  <div class="info-box warn-box">
+    <h3>⚠️ מגבלות שחשוב להכיר</h3>
+    <ul>
+      <li><strong>חשבון מחוק / בונן</strong> — API לא יחזיר מידע, UID עדיין קיים במאגרים</li>
+      <li><strong>מייל ציבורי</strong> — מוחזר רק אם הוגדר Contact Email בפרופיל (עסקי בעיקר)</li>
+      <li><strong>מייל אובסקורטי</strong> — Toutatis מציג <code>a***@gmail.com</code> (אות ראשונה + דומיין)</li>
+      <li><strong>היסטוריית שמות</strong> — אינסטגרם לא חושפת שינויי username דרך API ציבורי</li>
+      <li><strong>CORS</strong> — קריאות ישירות מהדפדפן ל-Instagram API נחסמות; curl / Python יעבדו טוב יותר</li>
+    </ul>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<!-- TOAST -->
+<div id="toast">✓ הועתק ללוח</div>
 
 <script>
-// ============================================================
-// APPS SCRIPT CODE — מוטמע בתוך ה-HTML
-// ============================================================
-const GS_CODE = `// ============================================================
-// Code.gs — Google Apps Script Backend
-// גיליון: "גאנה בדים"
-// הדבק את הקוד הזה ב: Extensions > Apps Script
-// ============================================================
+// ─── State ─────────────────────────────────────────────────────────────────
 
-const SHEET_NAME     = "גאנה בדים";
-const DATA_START_ROW = 7;   // ← שורה ראשונה עם נתונים
+const $ = id => document.getElementById(id);
 
-const STATUS_WAITING = "ממתין";
-const STATUS_CUTTING = "בחיתוך";
-const STATUS_DONE_ROLL = "מוכן @";
-const STATUS_DONE_BAG  = "מוכן 💰";
-
-// עמודות — שנה לפי הסדר האמיתי בגיליון שלך
-const COL = {
-  ID:            1,   // A
-  CUSTOMER:      2,   // B
-  FABRIC:        3,   // C
-  QTY_ORDERED:   4,   // D
-  DATE:          5,   // E
-  STATUS:        6,   // F
-  QTY_ACTUAL:    7,   // G
-  NOTES:         8,   // H
-};
-
-function doGet(e) {
-  const action = e.parameter.action || "getOrders";
-  if (action === "getOrders")   return respond(getOrders(e.parameter.status));
-  if (action === "updateStatus") return respond(updateStatus(
-    e.parameter.id, e.parameter.status, e.parameter.qty_actual || ""
-  ));
-  return respond({ error: "Unknown action" });
+function getInputs() {
+  return {
+    uid:      ($('inp-uid').value.trim()      || '53693488780'),
+    username: ($('inp-username').value.trim() || 'can_not_anymore'),
+    session:  ($('inp-session').value.trim()  || 'YOUR_SESSION_ID'),
+  };
 }
 
-function getOrders(filterStatus) {
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
-  const data  = sheet.getDataRange().getValues();
-  const rows  = data.slice(DATA_START_ROW - 1);
+// ─── Persist UID / Username ────────────────────────────────────────────────
 
-  const orders = rows
-    .filter(row => row[COL.ID - 1] !== "")
-    .filter(row => {
-      if (!filterStatus || filterStatus === "all") return true;
-      const s = String(row[COL.STATUS - 1]).trim();
-      if (filterStatus === "מוכן") return s === "מוכן @" || s === "מוכן 💰";
-      return s === filterStatus;
-    })
-    .map(row => ({
-      id:          row[COL.ID          - 1],
-      customer:    row[COL.CUSTOMER    - 1],
-      fabric:      row[COL.FABRIC      - 1],
-      qty_ordered: row[COL.QTY_ORDERED - 1],
-      date:        row[COL.DATE - 1]
-                   ? Utilities.formatDate(new Date(row[COL.DATE - 1]),
-                       Session.getScriptTimeZone(), "dd/MM/yyyy")
-                   : "",
-      status:      row[COL.STATUS     - 1],
-      qty_actual:  row[COL.QTY_ACTUAL - 1] || "",
-      notes:       row[COL.NOTES      - 1] || "",
-    }));
+(function restoreInputs() {
+  const savedUid  = localStorage.getItem('osint_uid');
+  const savedUser = localStorage.getItem('osint_username');
+  if (savedUid)  $('inp-uid').value      = savedUid;
+  if (savedUser) $('inp-username').value = savedUser;
+})();
 
-  return { orders };
+function saveInputs() {
+  const { uid, username } = getInputs();
+  if (uid !== 'YOUR_UID')           localStorage.setItem('osint_uid', uid);
+  if (username !== 'YOUR_USERNAME') localStorage.setItem('osint_username', username);
 }
 
-function updateStatus(orderId, newStatus, qtyActual) {
-  if (!orderId || !newStatus) return { error: "Missing parameters" };
-  const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
-  const data  = sheet.getDataRange().getValues();
+// ─── Generate ──────────────────────────────────────────────────────────────
 
-  for (let i = DATA_START_ROW - 1; i < data.length; i++) {
-    if (String(data[i][COL.ID - 1]).trim() === String(orderId).trim()) {
-      sheet.getRange(i + 1, COL.STATUS).setValue(newStatus);
-      if (qtyActual !== "") sheet.getRange(i + 1, COL.QTY_ACTUAL).setValue(qtyActual);
-      return { success: true, id: orderId, status: newStatus };
+function generate() {
+  saveInputs();
+  const { uid, username, session } = getInputs();
+
+  // Phase 1
+  $('cmd-instaloader').textContent =
+    `pip install instaloader\ninstaloader --no-pictures --no-videos --no-captions --no-metadata-json --user-id ${uid}`;
+
+  $('cmd-curl-uid').textContent =
+    `curl -s \\\n  -H "User-Agent: Mozilla/5.0 (Linux; Android 10; SM-G960F)" \\\n  -H "Cookie: sessionid=${session}" \\\n  "https://i.instagram.com/api/v1/users/${uid}/info/" | python3 -m json.tool`;
+
+  $('link-profile').href = `https://www.instagram.com/${username}/`;
+
+  // Phase 2
+  $('cmd-toutatis').textContent    = `python3 toutatis.py -u ${username} -s ${session}`;
+  $('cmd-osig').textContent        = `python3 main.py -u ${username}`;
+  $('cmd-instarecon').textContent  = `python instarecon.py -u ${username} -s ${session}`;
+
+  // Phase 3
+  const waybackUrl = `https://web.archive.org/web/*/instagram.com/${username}`;
+  $('link-wayback').href = waybackUrl;
+  $('cmd-sherlock').textContent      = `python3 sherlock ${username}`;
+  $('cmd-social').textContent        = `node app.js --username "${username}" --mode fast`;
+  $('cmd-insta-history').textContent = `instaloader --no-pictures ${username}`;
+
+  // Phase 4
+  $('cmd-python').textContent = buildPythonScript(uid);
+
+  // Phase 5
+  buildDorks(uid, username);
+
+  showToast('✓ כל הפקודות עודכנו');
+}
+
+// ─── Python script ─────────────────────────────────────────────────────────
+
+function buildPythonScript(uid) {
+  return `#!/usr/bin/env python3
+# instagram_osint.py
+# Usage: python3 instagram_osint.py -u ${uid} -s YOUR_SESSION_ID
+import requests, json, argparse
+
+def get_user_info(uid, session_id):
+    url = f"https://i.instagram.com/api/v1/users/{uid}/info/"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Linux; Android 11; SM-G991B) "
+                      "AppleWebKit/537.36 (KHTML, like Gecko) "
+                      "Chrome/90.0.4430.210 Mobile Safari/537.36",
+        "Cookie": f"sessionid={session_id}",
+        "Accept": "*/*",
+        "Accept-Language": "en-US",
+        "X-Requested-With": "XMLHttpRequest",
     }
-  }
-  return { error: "Order not found: " + orderId };
+    r = requests.get(url, headers=headers)
+    if r.status_code == 200:
+        data = r.json().get("user", {})
+        fields = [
+            ("Username",       data.get("username")),
+            ("Full Name",      data.get("full_name")),
+            ("Bio",            data.get("biography")),
+            ("Public Email",   data.get("public_email")),
+            ("Public Phone",   data.get("public_phone_number")),
+            ("External URL",   data.get("external_url")),
+            ("Business Email", data.get("business_email")),
+            ("Followers",      data.get("follower_count")),
+            ("Following",      data.get("following_count")),
+            ("Posts",          data.get("media_count")),
+            ("Is Private",     data.get("is_private")),
+            ("Is Verified",    data.get("is_verified")),
+        ]
+        for label, val in fields:
+            if val not in (None, "", False):
+                print(f"[+] {label}: {val}")
+        return data
+    else:
+        print(f"[-] Error {r.status_code}: {r.text[:200]}")
+
+if __name__ == "__main__":
+    p = argparse.ArgumentParser()
+    p.add_argument("-u", "--uid", required=True)
+    p.add_argument("-s", "--session", required=True)
+    args = p.parse_args()
+    get_user_info(args.uid, args.session)`;
 }
 
-function respond(data) {
-  return ContentService
-    .createTextOutput(JSON.stringify(data))
-    .setMimeType(ContentService.MimeType.JSON);
+// ─── Google Dorks ──────────────────────────────────────────────────────────
+
+function buildDorks(uid, username) {
+  const dorks = [
+    { label: `site:instagram.com "${uid}"`,                    q: `site:instagram.com "${uid}"` },
+    { label: `site:instagram.com ${username}`,                 q: `site:instagram.com ${username}` },
+    { label: `"${username}" gmail OR hotmail OR yahoo`,        q: `"${username}" gmail OR hotmail OR yahoo` },
+    { label: `intitle:"${username}" email`,                    q: `intitle:"${username}" email` },
+  ];
+
+  const grid = $('dorks-grid');
+  grid.innerHTML = '';
+
+  dorks.forEach(d => {
+    const url = `https://www.google.com/search?q=${encodeURIComponent(d.q)}`;
+    const btn = document.createElement('a');
+    btn.className = 'link-btn';
+    btn.href = url;
+    btn.target = '_blank';
+    btn.rel = 'noopener';
+    btn.style.fontFamily = "'Courier New', monospace";
+    btn.style.fontSize = '0.82rem';
+    btn.style.direction = 'ltr';
+    btn.style.textAlign = 'left';
+    btn.textContent = d.label;
+    grid.appendChild(btn);
+  });
 }
 
-function setupColumns() {
-  const sheet     = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(SHEET_NAME);
-  const headerRow = DATA_START_ROW - 1;
-  const headers   = sheet.getRange(headerRow, 1, 1, 10).getValues()[0];
-  if (!headers[COL.QTY_ACTUAL - 1]) {
-    sheet.getRange(headerRow, COL.QTY_ACTUAL).setValue("כמות בפועל");
-    SpreadsheetApp.getUi().alert("✅ עמודה 'כמות בפועל' נוספה (שורה " + headerRow + ", עמודה G)");
-  } else {
-    SpreadsheetApp.getUi().alert("✅ הכל תקין. נתונים מתחילים משורה " + DATA_START_ROW);
+// ─── Browser Fetch Attempt ─────────────────────────────────────────────────
+
+async function tryBrowserFetch() {
+  const { uid } = getInputs();
+  const resultBox = $('browser-result');
+  resultBox.className = 'result-box visible warn';
+  resultBox.textContent = '⏳ מנסה לשלוף מידע מהדפדפן...';
+
+  try {
+    const res = await fetch(`https://i.instagram.com/api/v1/users/${uid}/info/`, {
+      credentials: 'include',
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Linux; Android 10; SM-G960F)',
+        'Accept': 'application/json',
+      },
+      mode: 'cors',
+    });
+
+    if (res.ok) {
+      const data = await res.json();
+      const u = data.user || {};
+      const lines = [];
+      if (u.username)       lines.push(`Username:  ${u.username}`);
+      if (u.full_name)      lines.push(`Full Name: ${u.full_name}`);
+      if (u.biography)      lines.push(`Bio:       ${u.biography}`);
+      if (u.public_email)   lines.push(`Email:     ${u.public_email}`);
+      if (u.public_phone_number) lines.push(`Phone:     ${u.public_phone_number}`);
+      if (u.external_url)   lines.push(`URL:       ${u.external_url}`);
+      if (u.follower_count !== undefined) lines.push(`Followers: ${u.follower_count}`);
+
+      resultBox.className = 'result-box visible ok';
+      resultBox.textContent = lines.length ? lines.join('\n') : JSON.stringify(data, null, 2);
+    } else {
+      resultBox.className = 'result-box visible err';
+      resultBox.textContent = `HTTP ${res.status} — ${res.statusText}\n\nהשתמש ב-curl / Python עם Session ID.`;
+    }
+  } catch (e) {
+    resultBox.className = 'result-box visible err';
+    resultBox.textContent =
+      `CORS חסם את הבקשה (צפוי).\n\nהשתמש בכלי curl / Python מהטרמינל עם Session ID.\n\nשגיאה: ${e.message}`;
   }
-}`;
+}
 
-// Inject into <pre>
-document.getElementById('gsCodeBlock').textContent = GS_CODE;
-// Prefill inline URL input
-document.getElementById('scriptUrlInline').value = localStorage.getItem('scriptUrl') || '';
+// ─── Holehe ────────────────────────────────────────────────────────────────
 
-// ============================================================
-// STATE
-// ============================================================
-const DEFAULT_URL = 'https://script.google.com/macros/s/AKfycbzjanMAqiII579VgHIrL2c5CVnrN7USOzrnFAs2IagggsD51fKmfTZf2styXwTovP0Yrw/exec';
-let SCRIPT_URL    = localStorage.getItem('scriptUrl') || DEFAULT_URL;
-let allOrders     = [];
-let currentFilter = 'all';
+function generateHolehe() {
+  const email = $('inp-email').value.trim() || 'example@gmail.com';
+  $('cmd-holehe').textContent = `pip install holehe\nholehe ${email}`;
+  showToast('✓ פקודת Holehe עודכנה');
+}
 
-// ============================================================
-// BOOT
-// ============================================================
+// ─── Copy ──────────────────────────────────────────────────────────────────
+
+async function copyCode(id, btn) {
+  const text = $(id).textContent;
+  try {
+    await navigator.clipboard.writeText(text);
+    btn.textContent = '✓ הועתק';
+    btn.classList.add('copied');
+    showToast('✓ הועתק ללוח');
+    setTimeout(() => {
+      btn.textContent = 'העתק';
+      btn.classList.remove('copied');
+    }, 2000);
+  } catch {
+    showToast('⚠️ העתקה ידנית: סמן את הטקסט');
+  }
+}
+
+// ─── Toast ─────────────────────────────────────────────────────────────────
+
+let toastTimer;
+function showToast(msg) {
+  const t = $('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ─── Auto-generate on load if values exist ─────────────────────────────────
+
 window.addEventListener('DOMContentLoaded', () => {
-  if (!SCRIPT_URL) {
-    // no config yet — show setup tab hint after a tick
-    setTimeout(() => showToast('עבור לטאב ⚙️ הגדרה ראשונית להתחלה', ''), 600);
-  } else {
-    loadOrders();
+  const uid  = $('inp-uid').value.trim();
+  const user = $('inp-username').value.trim();
+  if (uid || user) generate();
+  else {
+    // Seed defaults so the page is immediately usable
+    $('inp-uid').value      = '53693488780';
+    $('inp-username').value = 'can_not_anymore';
+    generate();
   }
 });
-
-// ============================================================
-// TAB SWITCH
-// ============================================================
-function switchTab(name, btn) {
-  document.querySelectorAll('.top-tab').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-  btn.classList.add('active');
-  document.getElementById('tab-' + name).classList.add('active');
-}
-
-// ============================================================
-// COPY GS CODE
-// ============================================================
-function copyGsCode() {
-  navigator.clipboard.writeText(GS_CODE).then(() => {
-    showToast('✓ קוד הועתק ללוח', 'success');
-    const btn = document.querySelector('.gs-copy-btn');
-    btn.textContent = '✓ הועתק!';
-    setTimeout(() => btn.textContent = '📋 העתק קוד', 2000);
-  }).catch(() => {
-    // fallback
-    const ta = document.createElement('textarea');
-    ta.value = GS_CODE; ta.style.position = 'fixed'; ta.style.opacity = '0';
-    document.body.appendChild(ta); ta.select();
-    document.execCommand('copy'); document.body.removeChild(ta);
-    showToast('✓ קוד הועתק', 'success');
-  });
-}
-
-// ============================================================
-// API
-// ============================================================
-async function api(params) {
-  if (!SCRIPT_URL) { openConfig(); return null; }
-  const url = SCRIPT_URL + '?' + new URLSearchParams(params);
-  const res = await fetch(url);
-  if (!res.ok) throw new Error('HTTP ' + res.status);
-  return res.json();
-}
-
-async function loadOrders() {
-  const wrap = document.getElementById('cardsWrap');
-  const fab  = document.getElementById('fab');
-  fab.classList.add('spinning');
-  wrap.innerHTML = `<div class="state-wrap"><div class="state-icon">⟳</div><div>טוען הזמנות…</div></div>`;
-  try {
-    const data = await api({ action: 'getOrders', status: 'all' });
-    if (!data) return;
-    if (data.error) throw new Error(data.error);
-    allOrders = data.orders || [];
-    updateBadge();
-    updateCounts();
-    renderCards();
-  } catch (e) {
-    wrap.innerHTML = `<div class="state-wrap"><div class="state-icon">⚠</div><div>שגיאה בטעינה<br><small style="color:var(--text-faint)">${e.message}</small></div></div>`;
-  } finally {
-    fab.classList.remove('spinning');
-  }
-}
-
-async function updateOrder(id, status, qtyActual, card) {
-  const btns = card.querySelectorAll('.btn');
-  btns.forEach(b => b.disabled = true);
-  try {
-    const data = await api({ action: 'updateStatus', id, status, qty_actual: qtyActual });
-    if (!data || data.error) throw new Error(data?.error || 'שגיאה');
-    showToast('✓ ' + (status === 'מוכן' ? 'סומן כמוכן!' : 'עודכן ל"' + status + '"'), 'success');
-    const order = allOrders.find(o => String(o.id) === String(id));
-    if (order) { order.status = status; if (qtyActual) order.qty_actual = qtyActual; }
-    updateBadge();
-    updateCounts();
-    if (currentFilter !== 'all' && currentFilter !== status) {
-      card.style.transition = 'opacity 0.3s, transform 0.3s';
-      card.style.opacity = '0'; card.style.transform = 'scale(0.95)';
-      setTimeout(() => card.remove(), 300);
-    } else {
-      card.dataset.status = status;
-      card.querySelector('.status-pill').textContent = status;
-      card.querySelector('.status-pill').className = 'status-pill ' + status;
-    }
-  } catch (e) {
-    showToast('✗ שגיאה: ' + e.message, 'error');
-    btns.forEach(b => b.disabled = false);
-  }
-}
-
-// ============================================================
-// RENDER
-// ============================================================
-function renderCards() {
-  const wrap = document.getElementById('cardsWrap');
-  const isDone = s => s === 'מוכן @' || s === 'מוכן 💰';
-  const filtered = allOrders.filter(o => {
-    const s = o.status || '';
-    if (currentFilter === 'all')   return true;
-    if (currentFilter === 'מוכן') return isDone(s);
-    if (currentFilter === 'ממתין') return s === 'ממתין' || s === '';
-    return s === currentFilter;
-  });
-  if (filtered.length === 0) {
-    wrap.innerHTML = `<div class="state-wrap"><div class="state-icon">🎉</div><div>${
-      currentFilter === 'all' ? 'אין הזמנות פעילות' : 'אין הזמנות בסטטוס "' + currentFilter + '"'
-    }</div></div>`;
-    return;
-  }
-  const STATUS_ORDER = { '': 0, 'ממתין': 0, 'בחיתוך': 1, 'מוכן @': 2, 'מוכן 💰': 2 };
-  filtered.sort((a, b) => {
-    const sd = (STATUS_ORDER[a.status] ?? 9) - (STATUS_ORDER[b.status] ?? 9);
-    if (sd !== 0) return sd;
-    return (a.date || '').localeCompare(b.date || '');
-  });
-  wrap.innerHTML = '';
-  filtered.forEach((o, idx) => wrap.appendChild(buildCard(o, idx)));
-}
-
-function buildCard(o, idx) {
-  const div = document.createElement('div');
-  div.className = 'card';
-  div.dataset.status = o.status;
-  div.style.animationDelay = (idx * 35) + 'ms';
-  div.innerHTML = `
-    <div class="card-header">
-      <div class="order-id">#${escH(o.id)}</div>
-      <div class="status-pill ${escH(o.status)}">${escH(o.status)}</div>
-    </div>
-    <div class="fabric-name">${escH(o.fabric)}</div>
-    <div class="customer-name">${escH(o.customer)}</div>
-    <div class="meta-row">
-      <div class="meta-item">
-        <span class="meta-label">הוזמן</span>
-        <span class="meta-value highlight">${escH(o.qty_ordered)} מ'</span>
-      </div>
-      ${o.qty_actual ? `<div class="meta-item"><span class="meta-label">נחתך</span><span class="meta-value">${escH(o.qty_actual)} מ'</span></div>` : ''}
-      <div class="meta-item">
-        <span class="meta-label">תאריך</span>
-        <span class="meta-value">${escH(o.date)}</span>
-      </div>
-    </div>
-    ${o.notes ? `<div class="notes-text">${escH(o.notes)}</div>` : ''}
-    ${buildActions(o)}
-  `;
-  const btnStart  = div.querySelector('.btn-start');
-  const btnRoll   = div.querySelector('.btn-roll');
-  const btnBag    = div.querySelector('.btn-bag');
-  const btnReport = div.querySelector('.btn-report');
-  const qtyInput  = div.querySelector('.qty-input');
-  if (btnStart)  btnStart.onclick = () => updateOrder(o.id, 'בחיתוך', '', div);
-  if (btnRoll)   btnRoll.onclick  = () => updateOrder(o.id, 'מוכן @',  qtyInput?.value || '', div);
-  if (btnBag)    btnBag.onclick   = () => updateOrder(o.id, 'מוכן 💰', qtyInput?.value || '', div);
-  if (btnReport) btnReport.onclick = () => reportShortage(o, div);
-  return div;
-}
-
-function buildActions(o) {
-  const s = o.status;
-  if (s === 'מוכן @' || s === 'מוכן 💰') return '';
-  const qtyRow = `
-    <div class="qty-input-row">
-      <span class="qty-label">נחתך בפועל (מ'):</span>
-      <input class="qty-input" type="number" step="0.1" min="0"
-             value="${escH(o.qty_ordered)}" inputmode="decimal">
-    </div>`;
-  const doneButtons = `
-        <button class="btn btn-done btn-roll">@ גליל</button>
-        <button class="btn btn-done btn-bag">💰 שקית</button>
-        <button class="btn btn-report">חוסר</button>`;
-  if (s === 'ממתין') return `
-    <div class="action-section">${qtyRow}
-      <div class="btn-row">
-        <button class="btn btn-start">▶ התחל</button>
-        ${doneButtons}
-      </div>
-    </div>`;
-  if (s === 'בחיתוך') return `
-    <div class="action-section">${qtyRow}
-      <div class="btn-row">
-        ${doneButtons}
-      </div>
-    </div>`;
-  return '';
-}
-
-// ============================================================
-// FILTER / BADGE / SHORTAGE
-// ============================================================
-function setFilter(val, btn) {
-  currentFilter = val;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  renderCards();
-}
-
-function updateCounts() {
-  const isDone = s => s === 'מוכן @' || s === 'מוכן 💰';
-  const counts = {
-    all:      allOrders.length,
-    'ממתין':  allOrders.filter(o => !o.status || o.status === 'ממתין').length,
-    'בחיתוך': allOrders.filter(o => o.status === 'בחיתוך').length,
-    'מוכן':   allOrders.filter(o => isDone(o.status)).length,
-  };
-  for (const [key, val] of Object.entries(counts)) {
-    const el = document.getElementById('cnt-' + key);
-    if (el) el.textContent = val > 0 ? val : '';
-  }
-}
-
-function updateBadge() {
-  const waiting = allOrders.filter(o => o.status === 'ממתין').length;
-  const badge = document.getElementById('badge');
-  badge.textContent = waiting;
-  badge.classList.toggle('visible', waiting > 0);
-}
-
-function reportShortage(o, card) {
-  if (confirm(`דווח חוסר עבור "${o.fabric}" (#${o.id})?\nהסטטוס יחזור ל"ממתין".`)) {
-    updateOrder(o.id, 'ממתין', '', card);
-    showToast('⚠ חוסר דווח', 'error');
-  }
-}
-
-// ============================================================
-// TOAST
-// ============================================================
-let toastTimer;
-function showToast(msg, type = '') {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'toast ' + type;
-  clearTimeout(toastTimer);
-  requestAnimationFrame(() => {
-    t.classList.add('show');
-    toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
-  });
-}
-
-// ============================================================
-// CONFIG
-// ============================================================
-function openConfig() {
-  document.getElementById('scriptUrlInput').value = SCRIPT_URL;
-  document.getElementById('configOverlay').classList.add('open');
-}
-function closeConfigOnBg(e) {
-  if (e.target === document.getElementById('configOverlay')) closeConfig();
-}
-function closeConfig() {
-  document.getElementById('configOverlay').classList.remove('open');
-}
-function saveConfig() {
-  const url = document.getElementById('scriptUrlInput').value.trim();
-  if (!url.startsWith('https://script.google.com')) {
-    showToast('❌ כתובת לא תקינה', 'error'); return;
-  }
-  SCRIPT_URL = url;
-  localStorage.setItem('scriptUrl', url);
-  document.getElementById('scriptUrlInline').value = url;
-  closeConfig();
-  showToast('✓ חיבור נשמר', 'success');
-  loadOrders();
-}
-function saveConfigInline() {
-  const url = document.getElementById('scriptUrlInline').value.trim();
-  if (!url.startsWith('https://script.google.com')) {
-    showToast('❌ כתובת לא תקינה', 'error'); return;
-  }
-  SCRIPT_URL = url;
-  localStorage.setItem('scriptUrl', url);
-  document.getElementById('scriptUrlInput').value = url;
-  showToast('✓ חיבור נשמר — עבור לטאב תור הזמנות', 'success');
-  setTimeout(() => {
-    document.querySelector('.top-tab').click();
-    loadOrders();
-  }, 1200);
-}
-
-// ============================================================
-// UTILS
-// ============================================================
-function escH(s) {
-  return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-setInterval(() => { if (SCRIPT_URL) loadOrders(); }, 90000);
 </script>
 </body>
 </html>
